@@ -23,43 +23,26 @@
 package it.moondroid.galleryviewpager;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import it.moondroid.galleryviewpager.transformer.ZoomOutSlideTransformer;
+import it.moondroid.galleryviewpagerlibrary.GalleryViewPager;
 
 /**
  * PagerActivity: A Sample Activity for PagerContainer
  */
 public class PagerActivity extends AppCompatActivity {
 
-    PagerContainer mContainer;
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        mContainer = (PagerContainer) findViewById(R.id.pager_container);
 
-        ViewPager pager = mContainer.getViewPager();
+        GalleryViewPager pager = (GalleryViewPager) findViewById(R.id.gallery);
+
         //FragmentStatePagerAdapter adapter = new DummyFragmentPagerAdapter(getSupportFragmentManager());
         DummyViewPagerAdapter adapter = new DummyViewPagerAdapter(this);
 
         pager.setAdapter(adapter);
-        //Necessary or the pager will only have one extra page to show
-        // make this at least however many pages you can see
-        pager.setOffscreenPageLimit(5);
-        //A little space between pages
-        pager.setPageMargin(15);
-
-        //If hardware acceleration is enabled, you should also remove
-        // clipping on the pager for its children.
-        pager.setClipChildren(false);
-
-        pager.setPageTransformer(true, new ZoomOutSlideTransformer());
     }
 
 }

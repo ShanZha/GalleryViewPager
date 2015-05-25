@@ -1,4 +1,4 @@
-package it.moondroid.galleryviewpager.transformer;
+package it.moondroid.galleryviewpagerlibrary.transformer;
 
 import android.view.View;
 

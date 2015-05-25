@@ -20,42 +20,50 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package it.moondroid.galleryviewpager;
+package it.moondroid.galleryviewpagerlibrary;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
+import it.moondroid.galleryviewpagerlibrary.transformer.ZoomOutSlideTransformer;
 
 /**
  * PagerContainer: A layout that displays a ViewPager with its children that are outside
  * the typical pager bounds.
  */
-public class PagerContainer extends LinearLayout implements ViewPager.OnPageChangeListener {
+public class GalleryViewPager extends LinearLayout implements ViewPager.OnPageChangeListener {
 
     private ViewPager mPager;
     boolean mNeedsRedraw = false;
 
-    public PagerContainer(Context context) {
+    public GalleryViewPager(Context context) {
         super(context);
         init();
     }
 
-    public PagerContainer(Context context, AttributeSet attrs) {
+    public GalleryViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public PagerContainer(Context context, AttributeSet attrs, int defStyle) {
+    public GalleryViewPager(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
     private void init() {
+        inflate(getContext(), R.layout.galleryviewpager_layout, this);
+        setWeightSum(3.0f);
+        setOrientation(HORIZONTAL);
+        setGravity(Gravity.CENTER);
+
         //Disable clipping of children so non-selected pages are visible
         setClipChildren(false);
 
@@ -64,20 +72,39 @@ public class PagerContainer extends LinearLayout implements ViewPager.OnPageChan
         // application targeted at these releases.
         //setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
+        mPager = (ViewPager) findViewById(R.id.viewpager);
+        mPager.setOnPageChangeListener(this);
+
+        //Necessary or the pager will only have one extra page to show
+        // make this at least however many pages you can see
+        mPager.setOffscreenPageLimit(5);
+        //A little space between pages
+        mPager.setPageMargin(15);
+
+        //If hardware acceleration is enabled, you should also remove
+        // clipping on the pager for its children.
+        mPager.setClipChildren(false);
+
+        mPager.setPageTransformer(true, new ZoomOutSlideTransformer());
     }
 
-    @Override
-    protected void onFinishInflate() {
-        try {
-            mPager = (ViewPager) findViewById(R.id.viewpager);
-            mPager.setOnPageChangeListener(this);
-        } catch (Exception e) {
-            throw new IllegalStateException("The root child of PagerContainer must be a ViewPager");
-        }
-    }
+//    @Override
+//    protected void onFinishInflate() {
+//        try {
+//            mPager = (ViewPager) findViewById(R.id.viewpager);
+//            mPager.setOnPageChangeListener(this);
+//        } catch (Exception e) {
+//            throw new IllegalStateException("The root child of PagerContainer must be a ViewPager");
+//        }
+//    }
 
     public ViewPager getViewPager() {
         return mPager;
+    }
+
+    public void setAdapter(PagerAdapter adapter){
+        mPager.setAdapter(adapter);
     }
 
     private Point mCenter = new Point();
