@@ -25,12 +25,23 @@ package it.moondroid.galleryviewpager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.moondroid.galleryviewpagerlibrary.GalleryViewPager;
 
 /**
  * PagerActivity: A Sample Activity for PagerContainer
  */
 public class PagerActivity extends AppCompatActivity {
+
+    private static List<String> items = new ArrayList<>();
+
+    static {
+        for (int i = 1; i <= 10; i++) {
+            items.add("http://lorempixel.com/500/500/animals/" + i);
+        }
+    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +51,8 @@ public class PagerActivity extends AppCompatActivity {
         GalleryViewPager pager = (GalleryViewPager) findViewById(R.id.gallery);
 
         //FragmentStatePagerAdapter adapter = new DummyFragmentPagerAdapter(getSupportFragmentManager());
-        DummyViewPagerAdapter adapter = new DummyViewPagerAdapter(this);
+        ImageViewPagerAdapter adapter = new ImageViewPagerAdapter(this);
+        adapter.setData(items);
 
         pager.setAdapter(adapter);
     }
