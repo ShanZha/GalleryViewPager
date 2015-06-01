@@ -3,12 +3,14 @@ package it.moondroid.galleryviewpager;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -28,7 +30,7 @@ public class ImageViewPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, final int position) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.view_item_image, null);
         container.addView(view);
@@ -37,6 +39,13 @@ public class ImageViewPagerAdapter extends PagerAdapter {
         Glide.with(context)
                 .load(data.get(position))
                 .into(imageView);
+
+        view.findViewById(R.id.image_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "item " + position, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }

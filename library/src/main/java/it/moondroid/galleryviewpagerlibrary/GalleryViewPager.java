@@ -27,6 +27,7 @@ import android.graphics.Point;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -89,15 +90,6 @@ public class GalleryViewPager extends LinearLayout implements ViewPager.OnPageCh
         mPager.setPageTransformer(true, new ZoomOutSlideTransformer());
     }
 
-//    @Override
-//    protected void onFinishInflate() {
-//        try {
-//            mPager = (ViewPager) findViewById(R.id.viewpager);
-//            mPager.setOnPageChangeListener(this);
-//        } catch (Exception e) {
-//            throw new IllegalStateException("The root child of PagerContainer must be a ViewPager");
-//        }
-//    }
 
     public ViewPager getViewPager() {
         return mPager;
