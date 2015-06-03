@@ -1,25 +1,3 @@
-/*
- * Copyright (c) 2012 Wireless Designs, LLC
- * 
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- * 
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
 package it.moondroid.galleryviewpagerlibrary;
 
 import android.content.Context;
@@ -27,7 +5,6 @@ import android.graphics.Point;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -100,7 +77,6 @@ public class GalleryViewPager extends LinearLayout implements ViewPager.OnPageCh
     }
 
     private Point mCenter = new Point();
-    private Point mInitialTouch = new Point();
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -108,20 +84,23 @@ public class GalleryViewPager extends LinearLayout implements ViewPager.OnPageCh
         mCenter.y = h / 2;
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         //We capture any touches not already handled by the ViewPager
         // to implement scrolling from a touch outside the pager bounds.
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mInitialTouch.x = (int)ev.getX();
-                mInitialTouch.y = (int)ev.getY();
-            default:
-                ev.offsetLocation(mCenter.x - mInitialTouch.x, mCenter.y - mInitialTouch.y);
-                break;
-        }
+
+        ev.setLocation(getXRelativeToPager(ev.getX()), ev.getY());
 
         return mPager.dispatchTouchEvent(ev);
+    }
+
+    private float getXRelativeToPager(float x){
+        float pagerWidth = mPager.getWidth();
+        float totalWidth = getWidth();
+        float outsideWidth = (totalWidth - pagerWidth) / 2f;
+
+        return x - outsideWidth;
     }
 
     @Override
