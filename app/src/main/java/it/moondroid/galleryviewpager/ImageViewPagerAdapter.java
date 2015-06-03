@@ -17,6 +17,8 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.moondroid.galleryviewpagerlibrary.ReflectionTransformation;
+
 /**
  * Created by bwbuser on 21/05/2015.
  */
@@ -38,6 +40,7 @@ public class ImageViewPagerAdapter extends PagerAdapter {
         ImageView imageView = (ImageView) view.findViewById(R.id.image);
         Glide.with(context)
                 .load(data.get(position))
+                .bitmapTransform(new ReflectionTransformation(Glide.get(context).getBitmapPool()))
                 .into(imageView);
 
         view.findViewById(R.id.image_layout).setOnClickListener(new View.OnClickListener() {
